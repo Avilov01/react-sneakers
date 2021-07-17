@@ -1,0 +1,13 @@
+{
+   "window.zoomLevel": 0,
+   "editor.cursorBlinking": "phase",
+   "editor.cursorSmoothCaretAnimation": true,
+   "editor.tabSize": 3,
+   "editor.fontSize": 18,
+   "prettier.printWidth": 100,
+   "editor.fontWeight": 400,
+   "editor.lineHeight": 30,
+   "editor.fontLigatures": true,
+   "editor.fontFamily": "Fira Code, Consolas, Courier New, monospace",
+   "editor.letterSpacing": -0.05
+}
