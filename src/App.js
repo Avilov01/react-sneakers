@@ -7,6 +7,7 @@ function App() {
 	const [items, setItems] = React.useState([]);
 	const [cartItems, setCartItems] = React.useState([]);
 	const [cartOpened, setCartOpened] = React.useState(false);
+	const [searchValue, setSearchValue] = React.useState('');
 
 	React.useEffect(() => {
 		fetch('https://60fd18f51fa9e90017c70d67.mockapi.io/items')
@@ -16,14 +17,20 @@ function App() {
 
 	const onAddToCart = obj => {
 		setCartItems(prev =>
-			!prev.some(item => item.imgUrl === obj.imgUrl) ? [...prev, obj] : [...prev],
-		);
+			 !prev.some(item => item.imgUrl === obj.imgUrl) && [...prev, obj]);
+	};
+
+	const onChangeSearchInput = event => {
+		setSearchValue(event.target.value);
 	};
 
 	const onDeleteToCart = obj => {
-		const filter = cartItems.filter(item => item.imgUrl !== obj.imgUrl);
-		setCartItems([...filter]);
+		setCartItems(prev => prev.filter(item => item.imgUrl !== obj.imgUrl));
 	};
+
+	const clearSearchValue =() => {
+		setSearchValue('')
+	}
 
 	return (
 		<div className='wrapper clear'>
@@ -39,15 +46,23 @@ function App() {
 
 			<div className='content p-40'>
 				<div className='mb-40 d-flex align-center justify-between'>
-					<h1>Все кроссовки</h1>
+					<h1>{searchValue ? `Поискпо запросу: ${searchValue}` : 'Все кросовки'}</h1>
 					<div className='search-block'>
 						<img src='/img/search.svg' alt='Search' />
-						<input placeholder='Поиск...' />
+
+						<input
+							onChange={onChangeSearchInput}
+							value={searchValue}
+							placeholder='Поиск...'
+						/>
+						{searchValue && (
+							<img className='clear cu-p' src='img/btn-remove.svg' alt='Clear' onClick={clearSearchValue}/>
+						)}
 					</div>
 				</div>
 
 				<div className='d-flex flex-wrap'>
-					{items.map(item => (
+					{items.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase())).map(item => (
 						<Card
 							title={item.title}
 							cost={item.cost + ' руб.'}
