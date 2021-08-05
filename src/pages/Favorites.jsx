@@ -1,6 +1,6 @@
 import Card from '../components/Card';
 
-function Favorites({ items, onAddtoFavorite, onAddToCart, onRemoveToCart }) {
+function Favorites({ items, onAddtoFavorite, onAddToCart }) {
 	return (
 		<div className='content p-40'>
 			<div className='mb-40 d-flex align-center justify-between'>
@@ -15,7 +15,6 @@ function Favorites({ items, onAddtoFavorite, onAddToCart, onRemoveToCart }) {
 					<Card
 						onFavorite={obj => onAddtoFavorite(obj)}
 						onPlus={obj => onAddToCart(obj)}
-						onRemove={onRemoveToCart}
                   favorited={true}
 						key={item.imgUrl}
 						{...item}

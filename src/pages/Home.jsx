@@ -7,8 +7,26 @@ function Home({
 	clearSearchValue,
 	onAddtoFavorite,
 	onAddToCart,
-	onRemoveToCart,
+	cartItems,
+	isLoading,
 }) {
+	const renderItems = () => {
+		const filteredItems = items.filter(item =>
+			item.title.toLowerCase().includes(searchValue.toLowerCase()),
+		);
+		return (isLoading ? [...Array(8)] : filteredItems).map((item, index) => (
+			<Card
+				cartItems={cartItems}
+				onFavorite={obj => onAddtoFavorite(obj)}
+				onPlus={obj => onAddToCart(obj)}
+				added={cartItems.some(obj => obj.id === item.id)}
+				isLoading={isLoading}
+				key={index}
+				{...item}
+			/>
+		));
+	};
+
 	return (
 		<div className='content p-40'>
 			<div className='mb-40 d-flex align-center justify-between'>
@@ -28,19 +46,7 @@ function Home({
 				</div>
 			</div>
 
-			<div className='d-flex flex-wrap'>
-				{items
-					.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()))
-					.map(item => (
-						<Card
-							onFavorite={obj => onAddtoFavorite(obj)}
-							onPlus={obj => onAddToCart(obj)}
-							onRemove={onRemoveToCart}
-							key={item.imgUrl}
-							{...item}
-						/>
-					))}
-			</div>
+			<div className='d-flex flex-wrap'>{renderItems()}</div>
 		</div>
 	);
 }
