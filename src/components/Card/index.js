@@ -1,29 +1,21 @@
 import React from 'react';
 import styles from './Card.module.scss';
 import ContentLoader from 'react-content-loader';
+import AppContext from '../../context';
 
-function Card({
-	title,
-	cost,
-	imgUrl,
-	id,
-	onFavorite,
-	onPlus,
-	favorited = false,
-	added = false,
-	isLoading,
-}) {
-	const [isAdded, setIsAdded] = React.useState(added);
+function Card({ title, cost, imgUrl, id, onFavorite, onPlus, favorited = false, isLoading }) {
 	const [isFavorite, setIsFavorite] = React.useState(favorited);
+	const { isAddedItems } = React.useContext(AppContext);
 
-	const handleIsAdded = () => {
-		setIsAdded(prev => !prev);
-		onPlus({ id, title, cost, imgUrl });
+	const obj = { id, parentId: id, title, cost, imgUrl };
+
+	const onClickPlus = () => {
+		onPlus(obj);
 	};
 
 	const handleIsFavorite = () => {
 		setIsFavorite(prev => !prev);
-		onFavorite({ title, cost, imgUrl, id });
+		onFavorite(obj);
 	};
 
 	return (
@@ -44,13 +36,15 @@ function Card({
 				</ContentLoader>
 			) : (
 				<>
-					<div className={styles.favorite}>
-						<img
-							onClick={handleIsFavorite}
-							src={isFavorite ? '/img/favorite-liked.svg' : '/img/favorite-unliked.svg'}
-							alt='Unliked'
-						/>
-					</div>
+					{onFavorite && (
+						<div className={styles.favorite}>
+							<img
+								onClick={handleIsFavorite}
+								src={isFavorite ? '/img/favorite-liked.svg' : '/img/favorite-unliked.svg'}
+								alt='Unliked'
+							/>
+						</div>
+					)}
 					<img width='100%' height={135} src={imgUrl} alt='Sneakers' />
 					<h5>{title}</h5>
 					<div className='d-flex justify-between align-center'>
@@ -59,12 +53,14 @@ function Card({
 							<b>{cost}</b>
 						</div>
 
-						<img
-							className={styles.plus}
-							onClick={handleIsAdded}
-							src={isAdded ? '/img/btn-cheked.svg' : '/img/btn-plus.svg'}
-							alt='Plus'
-						/>
+						{onPlus && (
+							<img
+								className={styles.plus}
+								onClick={onClickPlus}
+								src={isAddedItems(id) ? '/img/btn-cheked.svg' : '/img/btn-plus.svg'}
+								alt='Plus'
+							/>
+						)}
 					</div>
 				</>
 			)}
